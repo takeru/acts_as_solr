@@ -245,6 +245,18 @@ class ParserMethodsTest < Test::Unit::TestCase
         end
       end
     end
+
+    context "When quoting strings" do
+
+      should "quote values that have spaces" do
+        assert_equal '(some_facet:"One Fish") AND (other_t:"Two Fish")', @parser.quote_values_with_spaces("(some_facet:One Fish) AND (other_t:Two Fish)")
+      end
+
+      should "not quote values that do not have spaces" do
+        assert_equal '(age_i:21) OR (some_facet:foo)', @parser.quote_values_with_spaces("(age_i:21) OR (some_facet:foo)")
+      end
+
+    end
   
     context "When adding scores" do
       setup do

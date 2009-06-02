@@ -72,7 +72,8 @@ module ActsAsSolr #:nodoc:
         query_options[:field_list] = [field_list, 'score']
         query = "(#{query.gsub(/ *: */,"_t:")}) #{models}"
         order = options[:order].split(/\s*,\s*/).collect{|e| e.gsub(/\s+/,'_t ').gsub(/\bscore_t\b/, 'score')  }.join(',') if options[:order] 
-        query_options[:query] = replace_types([query])[0] # TODO adjust replace_types to work with String or Array  
+        query_options[:query] = replace_types([query])[0] # TODO adjust replace_types to work with String or Array
+        query_options[:query] = quote_values_with_spaces(query_options[:query])
 
         if options[:order]
           # TODO: set the sort parameter instead of the old ;order. style.
@@ -165,6 +166,10 @@ module ActsAsSolr #:nodoc:
         end
       end
       strings
+    end
+
+    def quote_values_with_spaces(string)
+      string.gsub(/:([^\s\)]*)\s([^\s\)]*)\)/, ':"\1 \2")')
     end
     
     # Adds the score to each one of the instances found

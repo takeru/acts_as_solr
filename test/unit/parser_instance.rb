@@ -15,5 +15,5 @@ class ActsAsSolr::ParserInstance
     []
   end
   
-  public :parse_results, :reorder, :parse_query, :add_scores, :replace_types
+  public :parse_results, :reorder, :parse_query, :add_scores, :replace_types, :quote_values_with_spaces
 end
