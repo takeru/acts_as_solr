@@ -78,7 +78,7 @@ module ActsAsSolr #:nodoc:
           # TODO: set the sort parameter instead of the old ;order. style.
           query_options[:query] << ';' << replace_types([order], false)[0]
         end
-        
+
         ActsAsSolr::Post.execute(Solr::Request::Standard.new(query_options), options[:core])
       rescue
         raise "There was a problem executing your search\n#{query_options.inspect}\n: #{$!} in #{$!.backtrace.first}"

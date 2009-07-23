@@ -3,6 +3,8 @@ require 'test/unit'
 require 'active_record'
 require 'active_record/fixtures'
 
+require 'ruby-debug'
+
 begin
   require 'active_support/test_case'
 rescue
