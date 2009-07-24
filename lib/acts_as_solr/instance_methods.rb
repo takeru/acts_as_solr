@@ -73,12 +73,20 @@ module ActsAsSolr #:nodoc:
         end
       end
       
+      add_dynamic_attributes(doc)
       add_includes(doc)
+      
       logger.debug doc.to_xml
       doc
     end
     
     private
+    def add_dynamic_attributes(doc)
+      dynamic_attributes.each do |attribute|
+        doc << Solr::Field.new("#{attribute.name}_t" => ERB::Util.html_escape(attribute.value))
+      end if configuration[:dynamic_attributes]
+    end
+    
     def add_includes(doc)
       if configuration[:solr_includes].respond_to?(:each)
         configuration[:solr_includes].each do |association, options|

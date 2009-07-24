@@ -158,6 +158,9 @@ module ActsAsSolr #:nodoc:
     #                   acts_as_solr :auto_commit => false
     #                 end
     # 
+    # dynamic_attributes: Default false. When true, requires a has_many relationship to a DynamicAttribute
+    #                     (:name, :value) model. Then, all dynamic attributes will be mapped as normal attributes
+    #                    in Solr, so you can filter like this: Model.find_by_solr "#{dynamic_attribute.name}:Lorem"
     def acts_as_solr(options={}, solr_options={}, &deferred_solr_configuration)
 
       extend ClassMethods
@@ -246,6 +249,7 @@ module ActsAsSolr #:nodoc:
       self.configuration = {
         :fields => nil,
         :additional_fields => nil,
+        :dynamic_attributes => false,
         :exclude_fields => [],
         :auto_commit => true,
         :include => nil,

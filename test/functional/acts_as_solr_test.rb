@@ -3,7 +3,11 @@ require "#{File.dirname(File.expand_path(__FILE__))}/../test_helper"
 
 class ActsAsSolrTest < Test::Unit::TestCase
   
-  fixtures :books, :movies, :electronics, :postings, :authors
+  fixtures :books, :movies, :electronics, :postings, :authors, :advertises
+  
+  DynamicAttribute.delete_all
+  Advertise.first.dynamic_attributes.create! :name => 'Description', :value => 'A very cool bike'
+  Advertise.first.dynamic_attributes.create! :name => 'Price', :value => '1000'
 
   # Inserting new data into Solr and making sure it's getting indexed
   def test_insert_new_data
@@ -311,12 +315,13 @@ class ActsAsSolrTest < Test::Unit::TestCase
   # for each individual record
   def test_find_by_solr_with_score
     books = Book.find_by_solr 'ruby^10 OR splinter', :scores => true
+
     assert_equal 2, books.total
     assert (books.max_score >= 0.3 && books.max_score <= 0.6)
 
     books.records.each { |book| assert_not_nil book.solr_score }
     assert (books.docs.first.solr_score >= 0.3 && books.docs.first.solr_score <= 0.6)
-    assert (books.docs.last.solr_score >= 0.1 && books.docs.last.solr_score <= 0.2)
+    assert (books.docs.last.solr_score >= 0.2 && books.docs.last.solr_score <= 0.3)
   end
   
   # Making sure nothing breaks when html entities are inside
@@ -390,7 +395,7 @@ class ActsAsSolrTest < Test::Unit::TestCase
 
     books = Book.find_by_solr 'ruby^10 OR splinter', {:scores => true, :order => 'score desc' }
     assert (books.docs.first.solr_score >= 0.3 && books.docs.first.solr_score <= 0.6)
-    assert (books.docs.last.solr_score >= 0.1 && books.docs.last.solr_score <= 0.2)
+    assert (books.docs.last.solr_score >= 0.2 && books.docs.last.solr_score <= 0.3)
   end
   
   # Search based on fields with the :date format
@@ -409,5 +414,10 @@ class ActsAsSolrTest < Test::Unit::TestCase
     Gadget.search_disabled = true
     gadget = Gadget.create(:name => "flipvideo mino")
     assert_equal 0, Gadget.find_id_by_solr('flipvideo').total
+  end
+  
+  def test_should_find_filtering_a_dynamic_attribute
+    records = Advertise.find_by_solr "Description:bike"
+    assert_equal 1, records.total
   end
 end
