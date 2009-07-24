@@ -112,6 +112,7 @@ module ActsAsSolr #:nodoc:
       data = parse_query(query, options)
       return parse_results(data, options)
     end
+    alias :search :find_by_solr
     
     # Finds instances of a model and returns an array with the ids:
     #  Book.find_id_by_solr "rails" => [1,4,7]

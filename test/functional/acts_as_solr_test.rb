@@ -420,4 +420,8 @@ class ActsAsSolrTest < Test::Unit::TestCase
     records = Advertise.find_by_solr "Description:bike"
     assert_equal 1, records.total
   end
+  
+  def test_search_is_an_alias_for_find_by_solr
+    assert_equal Advertise.find_by_solr("bike").docs, Advertise.search("bike").docs
+  end
 end
