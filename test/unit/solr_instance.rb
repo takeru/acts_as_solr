@@ -47,3 +47,19 @@ class SolrInstance
     "s"
   end
 end
+
+class Tagging
+  attr_reader :tag
+  
+  def initialize(name)
+    @tag = Tag.new name
+  end
+end
+
+class Tag
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+end

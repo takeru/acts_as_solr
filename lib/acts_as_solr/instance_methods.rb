@@ -75,12 +75,19 @@ module ActsAsSolr #:nodoc:
       
       add_dynamic_attributes(doc)
       add_includes(doc)
+      add_tags(doc)
       
       logger.debug doc.to_xml
       doc
     end
     
     private
+    def add_tags(doc)
+      taggings.each do |tagging|
+        doc << Solr::Field.new("tag_s" => tagging.tag.name)
+      end if configuration[:taggable]
+    end
+    
     def add_dynamic_attributes(doc)
       dynamic_attributes.each do |attribute|
         doc << Solr::Field.new("#{attribute.name}_t" => ERB::Util.html_escape(attribute.value))

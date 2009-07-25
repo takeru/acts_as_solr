@@ -221,6 +221,27 @@ class InstanceMethodsTest < Test::Unit::TestCase
           assert_not_nil @instance.to_solr_doc.fields.find {|f| f.name.to_s == "alias_s"}
           assert_nil     @instance.to_solr_doc.fields.find {|f| f.name.to_s == "nickname_s"}
         end
+        
+        context "when indexing tags" do
+          setup do
+            taggings = [Tagging.new('house'), Tagging.new('beach')].sort { |a, b| rand - 0.5 }
+            @instance.stubs(:taggings).returns(taggings)
+            @instance.configuration[:taggable] = true
+            @fields = @instance.to_solr_doc.fields
+          end
+          
+          should "set the field name as tag of type string" do
+            assert_equal "tag_s", @fields.last.name
+          end
+          
+          should "set the field value with the tag value" do
+            assert_equal @instance.taggings.last.tag.name, @fields.last.value
+          end
+          
+          should "consider all of them" do
+            assert_equal @instance.taggings.size, @fields.select { |f| f.name.eql? "tag_s" }.size
+          end
+        end
 
         context "when associations are included" do
           setup do
