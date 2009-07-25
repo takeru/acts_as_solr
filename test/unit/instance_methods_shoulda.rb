@@ -230,8 +230,8 @@ class InstanceMethodsTest < Test::Unit::TestCase
             @fields = @instance.to_solr_doc.fields
           end
           
-          should "set the field name as tag of type string" do
-            assert_equal "tag_s", @fields.last.name
+          should "set the field name as tag of type text, so they can be found by a query without filters" do
+            assert_equal "tag_t", @fields.last.name
           end
           
           should "set the field value with the tag value" do
@@ -239,7 +239,7 @@ class InstanceMethodsTest < Test::Unit::TestCase
           end
           
           should "consider all of them" do
-            assert_equal @instance.taggings.size, @fields.select { |f| f.name.eql? "tag_s" }.size
+            assert_equal @instance.taggings.size, @fields.select { |f| f.name.include? "tag_" }.size
           end
         end
 

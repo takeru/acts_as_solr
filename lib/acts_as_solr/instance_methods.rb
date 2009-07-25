@@ -84,7 +84,7 @@ module ActsAsSolr #:nodoc:
     private
     def add_tags(doc)
       taggings.each do |tagging|
-        doc << Solr::Field.new("tag_s" => tagging.tag.name)
+        doc << Solr::Field.new("tag_t" => tagging.tag.name)
       end if configuration[:taggable]
     end
     
