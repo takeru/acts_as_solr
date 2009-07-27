@@ -90,7 +90,9 @@ module ActsAsSolr #:nodoc:
     
     def add_dynamic_attributes(doc)
       dynamic_attributes.each do |attribute|
-        doc << Solr::Field.new("#{attribute.name}_t" => ERB::Util.html_escape(attribute.value))
+        value = ERB::Util.html_escape(attribute.value)
+        doc << Solr::Field.new("#{attribute.name}_t" => value)
+        doc << Solr::Field.new("#{attribute.name}_facet" => value)
       end if configuration[:dynamic_attributes]
     end
     

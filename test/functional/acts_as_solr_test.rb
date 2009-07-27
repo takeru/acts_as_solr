@@ -421,6 +421,12 @@ class ActsAsSolrTest < Test::Unit::TestCase
     assert_equal 1, records.total
   end
   
+  def test_dynamic_attributes_are_faceted
+    records = Advertise.find_by_solr "Description:bike", :facets => { :fields => [:Description] }
+    expected = { "A very cool bike" => 1 }
+    assert_equal expected, records.facets['facet_fields']['Description_facet']
+  end
+  
   def test_search_is_an_alias_for_find_by_solr
     assert_equal Advertise.find_by_solr("bike").docs, Advertise.search("bike").docs
   end
