@@ -13,45 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#-----------------------------------------------------------------------
-# a couple of test stopwords to test that the words are really being
-# configured from this file:
-stopworda
-stopwordb
+Solr example configuration
+--------------------------
 
-#Standard english stop words taken from Lucene's StopAnalyzer
-an
-and
-are
-as
-at
-be
-but
-by
-for
-if
-in
-into
-is
-it
-no
-not
-of
-on
-or
-s
-such
-t
-that
-the
-their
-then
-there
-these
-they
-this
-to
-was
-will
-with
+To run this example configuration, use 
 
+  java -jar start.jar
+
+in this directory, and when Solr is started connect to 
+
+  http://localhost:8983/solr/admin/
+
+To add documents to the index, use the post.sh script in
+the exampledocs subdirectory (while Solr is running),
+for example:
+
+  cd exampledocs
+  ./post.sh *.xml
+
+See also README.txt in the solr subdirectory, and check
+http://wiki.apache.org/solr/SolrResources for a list of
+tutorials and introductory articles.

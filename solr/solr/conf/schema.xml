@@ -114,6 +114,11 @@
    <dynamicField name="*_s_mv" type="string" indexed="true" stored="false" multiValued="true"/>
    <dynamicField name="*_zh_text" type="text_zh" indexed="true" stored="false" multiValued="true"/>
    <dynamicField name="*_display" type="text" indexed="false" stored="true" multiValued="true"/>
+   
+   <field name="lat" type="sdouble" indexed="true" stored="true"/><!-- must match the latField in solrconfig.xml -->
+   <field name="lng" type="sdouble" indexed="true" stored="true"/><!-- must match the lngField in solrconfig.xml -->
+   <field name="geo_distance" type="sdouble"/> <!-- Optional but used for distributed searching -->
+   <dynamicField name="_local*" type="sdouble" indexed="true" stored="true"/><!-- used internally by localsolr -->
  </fields>
 
  <uniqueKey>id</uniqueKey>

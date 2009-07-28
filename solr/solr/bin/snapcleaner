@@ -91,7 +91,13 @@ fi
 
 function remove
 {
-    syncing=`ps -fwwwu ${user}|grep -w rsync|grep -v grep|grep -w $1`
+    if [[ "${OS}" == "Darwin" || "${OS}" == "FreeBSD" ]]
+    then
+     syncing=`ps -www -U ${user} |grep -w rsync|grep -v grep|grep -w $1`
+    else
+     syncing=`ps -fwwwu ${user}|grep -w rsync|grep -v grep|grep -w $1`
+    fi
+
     if [[ -n $syncing ]]
     then
 	logMessage $1 not removed - rsync in progress
@@ -101,7 +107,7 @@ function remove
     fi
 }
 
-start=`date +"%s"`
+setStartTime
 
 logMessage started by $oldwhoami
 logMessage command: $0 $@
@@ -128,7 +134,7 @@ elif [[ -n ${num} ]]
 then
     logMessage cleaning up all snapshots except for the most recent ${num} ones
     unset snapshots count
-    snapshots=`ls -cd ${data_dir}/snapshot.* 2>/dev/null`
+    snapshots=`find ${data_dir} -type d -name 'snapshot.*' 2>/dev/null| sort -r`
     if [[ $? == 0 ]]
     then
         count=`echo $snapshots|wc -w`

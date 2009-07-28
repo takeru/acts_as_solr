@@ -215,7 +215,7 @@ class ParserMethodsTest < Test::Unit::TestCase
       context "with the order option" do
         should "add the order criteria to the query" do
           ActsAsSolr::Post.expects(:execute).with {|request, core|
-            request.to_hash[:q].include?(";active_t desc")
+            request.to_hash[:sort].include?("active_t desc")
           }
           @parser.parse_query "active:1", :order => "active desc"
         end
