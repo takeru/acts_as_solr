@@ -174,6 +174,25 @@ class InstanceMethodsTest < Test::Unit::TestCase
         @instance.to_solr_doc
       end
       
+      context "with a local" do
+        setup do
+          @local = Local.new '14.51', '-65.43'
+          @instance.stubs(:local).returns(@local)
+          @instance.configuration[:spatial] = true
+          @fields = @instance.to_solr_doc.fields
+        end
+      
+        should "add the longitude" do
+          field = @fields.find { |field| field.name.eql? "lng" }
+          assert_equal @local.longitude, field.value
+        end
+        
+        should "add the latitude" do
+          field = @fields.find { |field| field.name.eql? "lat" }
+          assert_equal @local.latitude, field.value
+        end
+      end
+      
       context "with indexed fields" do
         should "add fields with type" do
           assert_equal "Chunky bacon!", @instance.to_solr_doc[:name_s]

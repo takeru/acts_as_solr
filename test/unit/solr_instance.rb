@@ -63,3 +63,12 @@ class Tag
     @name = name
   end
 end
+
+class Local
+  attr_reader :longitude, :latitude
+
+  def initialize(long, lati)
+    @longitude = long
+    @latitude = lati
+  end
+end

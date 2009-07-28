@@ -161,7 +161,8 @@ module ActsAsSolr #:nodoc:
     # dynamic_attributes: Default false. When true, requires a has_many relationship to a DynamicAttribute
     #                     (:name, :value) model. Then, all dynamic attributes will be mapped as normal attributes
     #                    in Solr, so you can filter like this: Model.find_by_solr "#{dynamic_attribute.name}:Lorem"
-    # taggable: Default false. When true, index tags with field name tag. Tags are taken from taggings.tag relationship.
+    # taggable: Default false. When true, indexes tags with field name tag. Tags are taken from taggings.tag
+    # spatial: Default false. When true, indexes model.local.latitude and model.local.longitude as coordinates.
     def acts_as_solr(options={}, solr_options={}, &deferred_solr_configuration)
 
       extend ClassMethods
@@ -257,7 +258,8 @@ module ActsAsSolr #:nodoc:
         :facets => nil,
         :boost => nil,
         :if => "true",
-        :offline => false
+        :offline => false,
+        :spatial => false
       }
       self.solr_configuration = {
         :type_field => "type_s",

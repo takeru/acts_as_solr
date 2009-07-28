@@ -4,7 +4,7 @@ module ActsAsSolr #:nodoc:
     
     # Method used by mostly all the ClassMethods when doing a search
     def parse_query(query=nil, options={}, models=nil)
-      valid_options = [:offset, :limit, :facets, :models, :results_format, :order, :scores, :operator, :include, :lazy, :joins, :select, :core]
+      valid_options = [:offset, :limit, :facets, :models, :results_format, :order, :scores, :operator, :include, :lazy, :joins, :select, :core, :around]
       query_options = {}
 
       return nil if (query.nil? || query.strip == '')
@@ -76,7 +76,13 @@ module ActsAsSolr #:nodoc:
 
         # TODO: set the sort parameter instead of the old ;order. style.
         query_options[:sort] = replace_types([order], false)[0] if options[:order]
-
+        
+        if options[:around]
+          query_options[:radius] = options[:around][:radius]
+          query_options[:latitude] = options[:around][:latitude]
+          query_options[:longitude] = options[:around][:longitude]
+        end
+        
         ActsAsSolr::Post.execute(Solr::Request::Standard.new(query_options), options[:core])
       rescue
         raise "There was a problem executing your search\n#{query_options.inspect}\n: #{$!} in #{$!.backtrace.first}"

@@ -8,6 +8,10 @@ class ActsAsSolrTest < Test::Unit::TestCase
   DynamicAttribute.delete_all
   Advertise.first.dynamic_attributes.create! :name => 'Description', :value => 'A very cool bike'
   Advertise.first.dynamic_attributes.create! :name => 'Price', :value => '1000'
+  
+  Local.delete_all
+  Local.create! :advertise_id => 1, :longitude => '-77.4027', :latitude => '39.36'
+  Local.create! :advertise_id => 2, :longitude => '77.4027',  :latitude => '-38.36'
 
   # Inserting new data into Solr and making sure it's getting indexed
   def test_insert_new_data
@@ -429,5 +433,19 @@ class ActsAsSolrTest < Test::Unit::TestCase
   
   def test_search_is_an_alias_for_find_by_solr
     assert_equal Advertise.find_by_solr("bike").docs, Advertise.search("bike").docs
+  end
+  
+  def test_search_given_a_radius
+    records = Advertise.search "bike", :around => {:latitude => '-39.36',
+                                                   :longitude => '77.4027',
+                                                   :radius => 1}
+    assert_equal 0, records.total
+  end
+  
+  def test_records_are_found_in_a_radius
+    records = Advertise.search "bike", :around => {:latitude => '39.36',
+                                                   :longitude => '-77.4027',
+                                                   :radius => 1}
+    assert_equal 1, records.total
   end
 end

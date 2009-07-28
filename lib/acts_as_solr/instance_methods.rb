@@ -76,12 +76,20 @@ module ActsAsSolr #:nodoc:
       add_dynamic_attributes(doc)
       add_includes(doc)
       add_tags(doc)
+      add_space(doc)
       
       logger.debug doc.to_xml
       doc
     end
     
     private
+    def add_space(doc)
+      if configuration[:spatial]
+        doc << Solr::Field.new("lat" => local.latitude)
+        doc << Solr::Field.new("lng" => local.longitude)
+      end
+    end
+    
     def add_tags(doc)
       taggings.each do |tagging|
         doc << Solr::Field.new("tag_t" => tagging.tag.name)

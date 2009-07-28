@@ -861,19 +861,19 @@
     <queryResponseWriter name="custom" class="com.example.MyResponseWriter"/>
   -->
 
-<!-- localsolr request handler -->
-<searchComponent name="localsolr"     class="com.pjaol.search.solr.component.LocalSolrQueryComponent"/>
-
-<searchComponent name="geofacet"      class="com.pjaol.search.solr.component.LocalSolrFacetComponent"/>
-<requestHandler name="geo" class="org.apache.solr.handler.component.SearchHandler">
-    <arr name="components">
-      <str>localsolr</str>
-      <str>geofacet</str>
-      <str>mlt</str>
-      <str>highlight</str>
-      <str>debug</str>
-    </arr>
-</requestHandler>
+  <!-- localsolr request handler -->
+  <searchComponent name="localsolr"     class="com.pjaol.search.solr.component.LocalSolrQueryComponent"/>
+  <searchComponent name="geofacet"      class="com.pjaol.search.solr.component.LocalSolrFacetComponent"/>
+  
+  <requestHandler name="geo" class="org.apache.solr.handler.component.SearchHandler">
+      <arr name="components">
+        <str>localsolr</str>
+        <str>geofacet</str>
+        <str>mlt</str>
+        <str>highlight</str>
+        <str>debug</str>
+      </arr>
+  </requestHandler>
 
 
 
