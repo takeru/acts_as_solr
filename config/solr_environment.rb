@@ -16,7 +16,7 @@ unless defined? SOLR_DATA_PATH
   SOLR_DATA_PATH = ENV["SOLR_DATA_PATH"] || "#{RAILS_ROOT}/solr/#{ENV['RAILS_ENV']}"
 end
 unless defined? SOLR_CONFIG_PATH
-  SOLR_CONFIG_PATH = ENV["SOLR_CONFIG_PATH"] || SOLR_PATH
+  SOLR_CONFIG_PATH = ENV["SOLR_CONFIG_PATH"] || "#{SOLR_PATH}/solr"
 end
 
 unless defined? SOLR_PORT
