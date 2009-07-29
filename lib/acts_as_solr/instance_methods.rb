@@ -84,7 +84,7 @@ module ActsAsSolr #:nodoc:
     
     private
     def add_space(doc)
-      if configuration[:spatial]
+      if configuration[:spatial] and local
         doc << Solr::Field.new("lat" => local.latitude)
         doc << Solr::Field.new("lng" => local.longitude)
       end

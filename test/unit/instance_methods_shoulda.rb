@@ -193,6 +193,15 @@ class InstanceMethodsTest < Test::Unit::TestCase
         end
       end
       
+      context "without a local" do
+        should "should ignore the spatial option" do
+          @instance.stubs(:local).returns(nil)
+          @instance.configuration[:spatial] = true
+          fields = @instance.to_solr_doc.fields
+          assert_equal nil, fields.find { |field| field.name.eql? 'lng' }
+        end
+      end
+      
       context "with indexed fields" do
         should "add fields with type" do
           assert_equal "Chunky bacon!", @instance.to_solr_doc[:name_s]
