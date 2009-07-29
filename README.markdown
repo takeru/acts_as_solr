@@ -1,50 +1,12 @@
-`acts_as_solr` Rails plugin
+Description
 ======
 This plugin adds full text search capabilities and many other nifty features from Apache's [Solr](http://lucene.apache.org/solr/) to any Rails model.
 It was based on the first draft by Erik Hatcher.
 
-Current Release
-======
-The current stable release is v0.9 and was released on 06-18-2007.
-
-Changes
-======
-Please refer to the CHANGE_LOG
-
 Installation
 ======
 
-For Rails >= 2.1:
-
     script/plugin install git://github.com/mattmatt/acts_as_solr.git
-
-For Rails < 2.1:
-
-    cd vendor/plugins
-    git clone git://github.com/mattmatt/acts_as_solr.git
-    rm -rf acts_as_solr/.git
-
-Make sure you copy `vendor/plugins/acts_as_solr/config/solr.yml` to your Rails
-application's config directory, when you install via `git clone`.
-
-Here is an example solr.yml configuration:
-
-<pre><code>
-# Config file for the acts_as_solr plugin.
-#
-# If you change the host or port number here, make sure you update
-# them in your Solr config file
-
-development:
-  url: http://127.0.0.1:8982/solr
-
-production:
-  url: http://127.0.0.1:8983/solr
-  jvm_options: -server -d64 -Xmx1024M -Xms64M
-
-test:
-  url: http://127.0.0.1:8981/solr
-</code></pre>
 
 Requirements
 ------
@@ -74,7 +36,7 @@ Basic Usage
   acts_as_solr :fields => [:name, :author]
 
 # Then to find instances of your model, just do:
-  Model.find_by_solr(query) #query is a string representing your query
+  Model.search(query) #query is a string representing your query
 
 # Please see ActsAsSolr::ActsMethods for a complete info
 
@@ -97,22 +59,6 @@ end
 
 ([via](http://www.subelsky.com/2007/10/actsassolr-capistranhttpwwwbloggercomim.html#c1646308013209805416))
 
-Authors
-======
-Erik Hatcher: First draft<br>
-Thiago Jackiw: Previous developer<br>
-Luke Francl: Current developer<br>
-Mathias Meyer: Current developer<br>
-
-Support
-=======
-
-Check the [project website](http://mattmatt.github.com/acts_as_solr) or stop by the [Google Group](http://groups.google.com/group/acts_as_solr). Send bug reports through [GitHub Issues](http://github.com/mattmatt/acts_as_solr/issues).
-
 Release Information
 ======
 Released under the MIT license.
-
-More info
-======
-The old [acts_as_solr homepage](http://acts-as-solr.railsfreaks.com) is no more. For more up-to-date information, check out the project page of the current mainline on [GitHub](http://github.com/mattmatt/acts_as_solr/wikis).
