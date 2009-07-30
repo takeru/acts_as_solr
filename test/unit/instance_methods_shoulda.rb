@@ -267,7 +267,12 @@ class InstanceMethodsTest < Test::Unit::TestCase
           end
           
           should "consider all of them" do
-            assert_equal @instance.taggings.size, @fields.select { |f| f.name.include? "tag_" }.size
+            assert_equal @instance.taggings.size * 2, @fields.select { |f| f.name.include? "tag_" }.size
+          end
+          
+          should "facet them" do
+            assert_equal @fields.select { |f| f.name.include? "tag_t" }.size, 
+                         @fields.select { |f| f.name.include? "tag_facet" }.size
           end
         end
 
