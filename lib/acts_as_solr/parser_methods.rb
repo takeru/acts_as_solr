@@ -4,7 +4,7 @@ module ActsAsSolr #:nodoc:
     
     # Method used by mostly all the ClassMethods when doing a search
     def parse_query(query=nil, options={}, models=nil)
-      valid_options = [:offset, :limit, :facets, :models, :results_format, :order, :scores, :operator, :include, :lazy, :joins, :select, :core, :around]
+      valid_options = [:offset, :limit, :facets, :models, :results_format, :order, :scores, :operator, :include, :lazy, :joins, :select, :core, :around, :relevance]
       query_options = {}
 
       return nil if (query.nil? || query.strip == '')
@@ -15,6 +15,8 @@ module ActsAsSolr #:nodoc:
         query_options[:start] = options[:offset]
         query_options[:rows] = options[:limit]
         query_options[:operator] = options[:operator]
+        
+        query = add_relevance query, options[:relevance]
         
         # first steps on the facet parameter processing
         if options[:facets]
@@ -201,6 +203,19 @@ module ActsAsSolr #:nodoc:
       options = [options] unless options.kind_of? Array
       bad_options = options.map {|x| x.to_sym} - valid_other_options
       raise "Invalid option#{'s' if bad_options.size > 1} for faceted date's other param: #{bad_options.join(', ')}. May only be one of :after, :all, :before, :between, :none" if bad_options.size > 0
+    end
+    
+    private
+    
+    def add_relevance(query, relevance)
+      return query if relevance.nil?
+      q = query.split(":").first.split(" ")
+      q.pop
+      q = q.join ' '
+      relevance.each do |attribute, value|
+        query = "#{query} OR #{attribute}:(#{q})^#{value}"
+      end
+      query
     end
     
   end

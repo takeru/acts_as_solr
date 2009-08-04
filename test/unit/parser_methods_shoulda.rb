@@ -168,6 +168,14 @@ class ParserMethodsTest < Test::Unit::TestCase
         }
         @parser.parse_query "foo", :operator => :or
       end
+      
+      should "set the relevancy of the specified fields and non-filtered terms" do
+        expected = "(aeroplane brasil continent_t:south OR description_t:(aeroplane brasil)^3 OR tag_t:(aeroplane brasil)^5)"
+        ActsAsSolr::Post.expects(:execute).with {|request, core|
+          request.to_hash[:q].starts_with? expected
+        }
+        @parser.parse_query "aeroplane brasil continent:south", :relevance => {:tag => 5, :description => 3}
+      end
     
       should "not execute anything if the query is nil" do
         ActsAsSolr::Post.expects(:execute).never

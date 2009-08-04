@@ -108,6 +108,10 @@ module ActsAsSolr #:nodoc:
     #        of their attributes for the first time. Useful when you're using fragment caching based solely on
     #        types and ids.
     #
+    # relevance:: Sets fields relevance
+    #
+    #            Book.find_by_solr "zidane", :relevance => {:title => 5, :author => 2}
+    #
     def find_by_solr(query, options={})
       data = parse_query(query, options)
       return parse_results(data, options)
