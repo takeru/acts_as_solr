@@ -29,7 +29,7 @@ namespace :test do
     rm_f "coverage.data"
     rcov = "rcov --rails --aggregate coverage.data --text-summary -Ilib"
     
-    system("#{rcov} --html #{Dir.glob('test/**/*_test.rb').join(' ')}")
+    system("#{rcov} --html #{Dir.glob('test/**/*_shoulda.rb').join(' ')}")
     system("open coverage/index.html") if PLATFORM['darwin']
   end
   
