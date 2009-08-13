@@ -121,7 +121,7 @@ class FacetedSearchTest < Test::Unit::TestCase
   
   def test_faceted_search_with_dates
     records = Electronic.find_by_solr "memory", :facets => {:dates => {:fields => [:created_at, :updated_at],
-      :start => (Date.today - 7.years).strftime("%Y-%m-%dT%H:%M:%SZ"), :end => Date.today.strftime("%Y-%m-%dT%H:%M:%SZ"), :gap => '+1YEAR', :other => :all}}
+      :start => (Time.now.utc.to_date - 7.years).strftime("%Y-%m-%dT%H:%M:%SZ"), :end => Time.now.utc.to_date.strftime("%Y-%m-%dT%H:%M:%SZ"), :gap => '+1YEAR', :other => :all}}
 
     assert_equal 4, records.docs.size
     
@@ -135,19 +135,19 @@ class FacetedSearchTest < Test::Unit::TestCase
   end
   
   def test_faceted_search_with_dates_filter
-    records = Electronic.find_by_solr "memory", :facets => {:dates => {:filter => ["updated_at:[#{(Date.today - 3.months).strftime("%Y-%m-%dT%H:%M:%SZ")} TO NOW-1MONTH/DAY]"]}}
+    records = Electronic.find_by_solr "memory", :facets => {:dates => {:filter => ["updated_at:[#{(Time.now.utc.to_date - 3.months).strftime("%Y-%m-%dT%H:%M:%SZ")} TO NOW-1MONTH/DAY]"]}}
     
     assert_equal 2, records.docs.size
     
     records.docs.each { |r|
-      assert r.updated_at >= (Date.today - 3.month)
-      assert r.updated_at <= (Date.today - 1.month)
+      assert r.updated_at >= (Time.now.utc.to_date - 3.month)
+      assert r.updated_at <= (Time.now.utc.to_date - 1.month)
     }
   end
   
   def test_faceted_search_with_dates_filter_and_facets
     # this is a very contrived example but gives us data to validate
-    records = Electronic.find_by_solr "memory", :facets => {:dates => {:filter => ["updated_at:[#{(Date.today - 3.months).strftime("%Y-%m-%dT%H:%M:%SZ")} TO NOW-1MONTH/DAY]"],
+    records = Electronic.find_by_solr "memory", :facets => {:dates => {:filter => ["updated_at:[#{(Time.now.utc.to_date - 3.months).strftime("%Y-%m-%dT%H:%M:%SZ")} TO NOW-1MONTH/DAY]"],
       :fields => [:created_at, :updated_at], :start => 'NOW-2MONTHS/DAY', :end => 'NOW-1MONTH/DAY', :gap => '+1MONTH', :other => :all}}
     
     assert_equal 2, records.docs.size
